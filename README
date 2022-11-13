@@ -1,1 +1,16 @@
 https://grafana.com/grafana/dashboards/?search=Prometheus
+
+# to delete data - https://www.server-world.info/en/note?os=CentOS_8&p=prometheus&f=4
+
+How to enable admin API in docker-compose .. https://stackoverflow.com/questions/56585607/live-reload-prometheus-configuration-in-docker-compose
+
+```
+# remove data that [job] name matches [Blackbox_tcp]
+[root@dlp ~]# curl -X POST -g 'http://dlp.srv.world:9090/api/v1/admin/tsdb/delete_series?match[]={job="Blackbox_tcp"}'
+# remove data that [instance] name matches [node02.srv.world]
+[root@dlp ~]# curl -X POST -g 'http://dlp.srv.world:9090/api/v1/admin/tsdb/delete_series?match[]={instance="node02.srv.world"}'
+# remove all data
+[root@dlp ~]# curl -X POST -g 'http://dlp.srv.world:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~".+"}'
+# removed data are actually still on disk but if you'd like to clean up them manually, run like follows
+[root@dlp ~]# curl -X POST -g 'http://dlp.srv.world:9090/api/v1/admin/tsdb/clean_tombstones'
+```
